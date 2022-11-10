@@ -1,75 +1,16 @@
-import time
-
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
-
-def choose():
-    # url = "https://hot.ziroom.com/zrk_rent_cn/pages/list/main?product=1"
-    url = "https://www.ziroom.com/z/"
-
-    chrome_options = Options()
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
-    chrome_options.add_argument('--headless')  # 无头浏览器，不弹出浏览器，在后台爬取
-    # web = Chrome(options=chrome_options)
-    web = Chrome()
-    web.get(url)
-
-    # 地段
-    web.find_element("xpath", '/html/body/section/div[2]/ul/li[1]/div/div[1]/span').click()
-    web.find_element("xpath", '/html/body/section/div[2]/ul/li[1]/div/div[1]/div/div/a[2]').click()
-    # web.find_element("xpath", '/html/body/section/div[2]/ul/li[1]/div/div[1]/div[2]/span[12]/span[2]/a[5]').click()
-
-    # 类型 合租
-    web.find_element("xpath", '/html/body/section/div[2]/ul/li[2]/div/a[2]').click()
-
-    # 租金
-    web.find_element(By.NAME, value="low").send_keys('100')
-    web.find_element(By.NAME, value="high").send_keys('3500')
-    web.find_element(By.CLASS_NAME, value="confirm").click()
-
-    # 户型
-    web.find_element("xpath", "/html/body/section/div[2]/ul/li[4]/div/a[1]").click()
-
-    # 点击展开
-    web.find_element("xpath", "/html/body/section/div[2]/div[1]/div").click()
-
-    # 房源面积
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[3]/div/a[2]").click()
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[3]/div/a[3]").click()
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[3]/div/a[4]").click()
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[3]/div/a[5]").click()
-
-    # 朝向：南、东、西
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[4]/div/a[1]").click()
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[4]/div/a[3]").click()
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[4]/div/a[4]").click()
-
-    # 供暖方式
-    web.find_element("xpath", "/html/body/section/div[2]/ul/div/li[6]/div/a[1]").click()
-    time.sleep(20)
+chrome_options = Options()
+chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
+chrome_options.add_argument('--headless')  # 无头浏览器，不弹出浏览器，在后台爬取
+web = Chrome(options=chrome_options)
 
 
-def getXiChengInfo():
-    url = 'https://www.ziroom.com/z/z1-d23008626-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=1'
-    chrome_options = Options()
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
-    chrome_options.add_argument('--headless')  # 无头浏览器，不弹出浏览器，在后台爬取
-    web = Chrome(options=chrome_options)
-    web.get(url)
-
-    link_list = list()
+# 爬取房子信息
+def getHouseInfo():
     house_info_list = list()
-    # 爬取链接
-    pic_box = web.find_elements(By.CSS_SELECTOR, '.pic-box')
-    for house0 in pic_box:
-        if isSaleHouse(house0, 'tip'):
-            continue
-        link = house0.find_element(By.CLASS_NAME, 'pic-wrap').get_attribute("href")
-        link_list.append(link)
-
-    # 爬取房子信息
     info_box = web.find_elements(By.CSS_SELECTOR, '.info-box')
     for house in info_box:
         if isSaleHouse(house, 'label'):
@@ -79,10 +20,20 @@ def getXiChengInfo():
         tag = house.find_element(By.CLASS_NAME, 'tag').text
         house_info_list.append(title + desc + tag)
 
-    # 数据整合
-    ans = merge(link_list, house_info_list)
-    for i in ans:
-        print(i)
+    return house_info_list
+
+
+# 爬取链接信息
+def getLink():
+    link_list = list()
+    pic_box = web.find_elements(By.CSS_SELECTOR, '.pic-box')
+    for house in pic_box:
+        if isSaleHouse(house, 'tip'):
+            continue
+        link = house.find_element(By.CLASS_NAME, 'pic-wrap').get_attribute("href")
+        link_list.append(link)
+
+    return link_list
 
 
 def merge(link_list, house_info_list):
@@ -90,8 +41,8 @@ def merge(link_list, house_info_list):
     i = 0
     j = 0
     while i < len(link_list) and j < len(house_info_list):
-        ans.append(link_list[i])
         ans.append(house_info_list[j])
+        ans.append(link_list[i])
         i += 1
         j += 1
     return ans
@@ -108,5 +59,69 @@ def isSaleHouse(driver, tag):
         return flag
 
 
+def isPageTurn(driver, class_name):
+    flag = True
+    try:
+        driver.find_element(By.CSS_SELECTOR, class_name)
+        return flag
+    except:
+        flag = False
+        return flag
+
+
+def getXiChengInfo():
+    url = 'https://www.ziroom.com/z/z1-d23008626-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=1'
+    web.get(url)
+    xc_house_info_list = list()
+    xc_link_list = list()
+
+    if isPageTurn(web, '.Z_pages .next'):
+        for page in range(0, 3):
+            for inf in getHouseInfo():
+                xc_house_info_list.append(inf)
+
+            for li in getLink():
+                xc_link_list.append(li)
+
+            web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+    else:
+        xc_house_info_list = getLink()
+        xc_link_list = getHouseInfo()
+
+    # 数据整合
+    ans = merge(xc_house_info_list, xc_link_list)
+    print("==================================西城区房子详情：", str(len(xc_house_info_list)) + '个房源==================================')
+    for i in ans:
+        print(i)
+
+
+def getChaoYangInfo():
+   #url = 'https://www.ziroom.com/z/z1-d23008613-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=1'
+    url = 'https://www.ziroom.com/z/z1-d23008613-b18335706%7C18335709%7C18335711%7C18335740%7C18335647%7C18335704%7C611100324%7C18335736%7C611100448%7C18335622%7C18335707%7C611100698%7C611100316%7C18335641%7C611100323%7C611100330%7C611100602%7C1100006187%7C18335728%7C611100446-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=0'
+    web.get(url)
+
+    cy_house_info_list = list()
+    cy_link_list = list()
+    if isPageTurn(web, '.Z_pages .next'):
+        for page in range(0, 3):
+            for inf in getHouseInfo():
+                cy_house_info_list.append(inf)
+
+            for li in getLink():
+                cy_link_list.append(li)
+
+            web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+    else:
+        cy_house_info_list = getHouseInfo()
+        cy_link_list = getLink()
+
+    houseList = merge(cy_house_info_list, cy_link_list)
+
+    print("==================================朝阳区区房子详情：", str(len(cy_house_info_list)) + '个房源==================================')
+    for i in houseList:
+        print(i)
+
+
 if __name__ == '__main__':
     getXiChengInfo()
+    getChaoYangInfo()
