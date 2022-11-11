@@ -9,14 +9,17 @@ def getChaoYangInfo():
     cy_house_info_list = list()
     cy_link_list = list()
     if isPageTurn(web, '.Z_pages .next'):
-        for page in range(0, 3):
+        while True:
             for inf in getHouseInfo():
                 cy_house_info_list.append(inf)
 
             for li in getLink():
                 cy_link_list.append(li)
 
-            web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+            if isPageTurn(web, '.Z_pages .next'):
+                web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+            else:
+                break
     else:
         cy_house_info_list = getHouseInfo()
         cy_link_list = getLink()

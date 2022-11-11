@@ -8,14 +8,17 @@ def getDongChengInfo():
     dc_link_list = list()
 
     if isPageTurn(web, '.Z_pages .next'):
-        for page in range(0, 3):
+        while True:
             for inf in getHouseInfo():
                 dc_house_info_list.append(inf)
 
             for li in getLink():
                 dc_link_list.append(li)
 
-            web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+            if isPageTurn(web, '.Z_pages .next'):
+                web.find_element(By.XPATH, '//*[@id="page"]/a[last()]').click()
+            else:
+                break
     else:
         dc_house_info_list = getLink()
         dc_link_list = getHouseInfo()
