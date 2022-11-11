@@ -1,5 +1,6 @@
 from util import *
 
+
 def getDongChengInfo():
     url = 'https://www.ziroom.com/z/z1-d23008614-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=1'
     web.get(url)
@@ -20,7 +21,8 @@ def getDongChengInfo():
         dc_link_list = getHouseInfo()
 
     # 数据整合
-    ans = merge(dc_house_info_list, dc_link_list)
+    houseList = merge(dc_house_info_list, dc_link_list)
     print("======= 东城区房子详情：", str(len(dc_house_info_list)) + '个房源 =======')
-    for i in ans:
+    for i in houseList:
         print(i)
+    print('\n')

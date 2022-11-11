@@ -27,3 +27,4 @@ def getHaiDianInfo():
     print("======= 海淀区房子详情：", str(len(hd_house_info_list)) + '个房源 =======')
     for i in houseList:
         print(i)
+    print('\n')

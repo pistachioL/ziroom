@@ -26,3 +26,4 @@ def getChaoYangInfo():
     print("======= 朝阳区区房子详情：", str(len(cy_house_info_list)) + '个房源 =======')
     for i in houseList:
         print(i)
+    print('\n')

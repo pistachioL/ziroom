@@ -21,7 +21,8 @@ def getXiChengInfo():
         xc_link_list = getHouseInfo()
 
     # 数据整合
-    ans = merge(xc_house_info_list, xc_link_list)
+    houseList = merge(xc_house_info_list, xc_link_list)
     print("======= 西城区房子详情：", str(len(xc_house_info_list)) + '个房源 =======')
-    for i in ans:
+    for i in houseList:
         print(i)
+    print('\n')
