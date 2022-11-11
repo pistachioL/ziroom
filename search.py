@@ -8,7 +8,7 @@ def searchHouse():
 
     house_info_list = list()
     link_list = list()
-    areas = ['广安门', '西直门', '和平里', '复兴路']
+    areas = ['广安门', '复兴路', '和平里']
     for area in areas:
         print('正在爬取：' + area + '的房源......')
         web.find_element(By.CLASS_NAME, 'Z_search_input').clear()
