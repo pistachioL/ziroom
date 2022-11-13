@@ -5,7 +5,8 @@ from selenium.webdriver.common.by import By
 chrome_options = Options()
 chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
 chrome_options.add_argument('--headless')  # 无头浏览器，不弹出浏览器，在后台爬取
-web = Chrome(options=chrome_options)
+# web = Chrome(options=chrome_options)
+web = Chrome()
 
 
 # 爬取房子信息
@@ -42,7 +43,7 @@ def merge(link_list, house_info_list):
     j = 0
     while i < len(link_list) and j < len(house_info_list):
         ans.append(house_info_list[j])
-        ans.append(link_list[i])
+        ans.append(link_list[i] + '\n')
         i += 1
         j += 1
     return ans
