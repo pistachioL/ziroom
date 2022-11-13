@@ -3,8 +3,7 @@
 通过selenium获取符合条件的房子信息 
 
 1、根据指定的地区搜索房子
-
-<img width="282" alt="image" src="https://user-images.githubusercontent.com/35989937/201310125-91fcedbf-008b-45d9-80b5-78c92fcc4f50.png">
+<img width="272" alt="image" src="https://user-images.githubusercontent.com/35989937/201505563-838327ab-d719-4c1d-be69-29d4ec339726.png">
 
 
 2、爬取海淀、朝阳、西城、东城的房子
