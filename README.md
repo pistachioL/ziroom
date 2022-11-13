@@ -9,5 +9,5 @@
 
 2、爬取海淀、朝阳、西城、东城的房子
 
-<img width="253" alt="image" src="https://user-images.githubusercontent.com/35989937/201505618-6e86966f-008e-43b3-bb5a-09c929f62329.png">
+<img width="272" alt="image" src="https://user-images.githubusercontent.com/35989937/201505618-6e86966f-008e-43b3-bb5a-09c929f62329.png">
 
