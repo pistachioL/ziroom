@@ -12,7 +12,7 @@ web = Chrome()
 # 爬取房子信息
 def getHouseInfo():
     house_info_list = list()
-    info_box = web.find_elements(By.CSS_SELECTOR, '.info-box')
+    info_box = web.find_elements(By.CSS_SELECTOR, 'body > section > div.Z_list > div.Z_list-box > div > div.info-box')
     for house in info_box:
         if isSaleHouse(house, 'label'):
             continue
@@ -27,7 +27,7 @@ def getHouseInfo():
 # 爬取链接信息
 def getLink():
     link_list = list()
-    pic_box = web.find_elements(By.CSS_SELECTOR, '.pic-box')
+    pic_box = web.find_elements(By.CSS_SELECTOR, 'body > section > div.Z_list > div.Z_list-box > div > div.pic-box')
     for house in pic_box:
         if isSaleHouse(house, 'tip'):
             continue
@@ -38,14 +38,7 @@ def getLink():
 
 
 def merge(link_list, house_info_list):
-    ans = list()
-    i = 0
-    j = 0
-    while i < len(link_list) and j < len(house_info_list):
-        ans.append(house_info_list[j])
-        ans.append(link_list[i] + '\n')
-        i += 1
-        j += 1
+    ans = [x for y in zip(house_info_list, link_list) for x in y]
     return ans
 
 

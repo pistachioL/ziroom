@@ -2,7 +2,7 @@ from util import *
 
 
 def getDongChengInfo():
-    url = 'https://www.ziroom.com/z/z1-d23008614-u9-r0/?p=b3-g2|1|3-a1|2|3|4&cp=100TO3500&isOpen=1'
+    url = 'https://www.ziroom.com/z/z1-d23008614-u9-r0/?p=b33-g2|1|3-a2|3|4&cp=1000TO3500&isOpen=1'
     web.get(url)
     dc_house_info_list = list()
     dc_link_list = list()
